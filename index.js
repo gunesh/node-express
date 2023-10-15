@@ -1,10 +1,11 @@
-import express from 'express'
-import bodyParser from 'body-parser'
-import mongoose from 'mongoose'
-import mysql from 'mysql';
+const express = require('express');
+const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+const mysql = require('mysql');
+const cors = require('cors');
+var MongoClient = require('mongodb').MongoClient;
 
-import cors from 'cors'
-import AppRoute from './routes/appRoute.js'
+const AppRoute = require('./routes/appRoute.js');
 
 
 const app = express();
@@ -18,31 +19,75 @@ app.use(cors());
 AppRoute(app);
 // mongodb+srv://usergunesh:<password>@cluster0.znykm.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
 
+
+
+
+// const CONNECTION_URL = 'mongodb+srv://usergunesh:passwordgunesh@cluster0.znykm.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
 const CONNECTION_URL = 'mongodb+srv://usergunesh:passwordgunesh@cluster0.znykm.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
 const PORT = process.env.PORT || 5000;
 
+
+
+
 // MongoDB Connection
-// mongoose.connect(CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: true })
-//     .then(() => app.listen(PORT, () => {
-//         console.log(`Server Running on port: ${PORT}`)
-//     }))
-//     .catch((error) => console.log(error.message));
+mongoose.connect(CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => {
+
+    })
+    .catch((error) => console.log(error.message));
+
+
+
+MongoClient.connect(CONNECTION_URL, function (err, db) {
+  if (err) throw err;
+  var dbo = db.db("zee5");
+  var myobj = [
+    { name: 'John', address: 'Highway 71' },
+    { name: 'Peter', address: 'Lowstreet 4' },
+    { name: 'Amy', address: 'Apple st 652' },
+    { name: 'Hannah', address: 'Mountain 21' },
+    { name: 'Michael', address: 'Valley 345' },
+    { name: 'Sandy', address: 'Ocean blvd 2' },
+    { name: 'Betty', address: 'Green Grass 1' },
+    { name: 'Richard', address: 'Sky st 331' },
+    { name: 'Susan', address: 'One way 98' },
+    { name: 'Vicky', address: 'Yellow Garden 2' },
+    { name: 'Ben', address: 'Park Lane 38' },
+    { name: 'William', address: 'Central st 954' },
+    { name: 'Chuck', address: 'Main Road 989' },
+    { name: 'Viola', address: 'Sideway 1633' }
+  ];
+  dbo.collection("bids").insertMany(myobj, function (err, res) {
+    if (err) throw err;
+    console.log("Number of documents inserted: " + res.insertedCount);
+    db.close();
+  });
+});
+
+
+
+
+app.listen(PORT, () => {
+  console.log(`Server Running on port: ${PORT}`)
+})
+
+
 
 // MySQL Connection
-const ms = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'nz'
-});
-try {
-    ms.connect();
-    app.listen(PORT, () => {
-        console.log(`Server Running on port: ${PORT}`)
-    })
-} catch (error) {
-    console.log(`Error: ${error.message}`)
-}
+// const ms = mysql.createConnection({
+//     host: 'localhost',
+//     user: 'root',
+//     password: '',
+//     database: 'nz'
+// });
+// try {
+//     ms.connect();
+//     app.listen(PORT, () => {
+//         console.log(`Server Running on port: ${PORT}`)
+//     })
+// } catch (error) {
+//     console.log(`Error: ${error.message}`)
+// }
 
 
 
@@ -84,31 +129,6 @@ try {
 
 
 
-// MongoClient.connect(uri, function(err, db) {
-//   if (err) throw err;
-//   var dbo = db.db("zee5");
-//   var myobj = [
-//     { name: 'John', address: 'Highway 71'},
-//     { name: 'Peter', address: 'Lowstreet 4'},
-//     { name: 'Amy', address: 'Apple st 652'},
-//     { name: 'Hannah', address: 'Mountain 21'},
-//     { name: 'Michael', address: 'Valley 345'},
-//     { name: 'Sandy', address: 'Ocean blvd 2'},
-//     { name: 'Betty', address: 'Green Grass 1'},
-//     { name: 'Richard', address: 'Sky st 331'},
-//     { name: 'Susan', address: 'One way 98'},
-//     { name: 'Vicky', address: 'Yellow Garden 2'},
-//     { name: 'Ben', address: 'Park Lane 38'},
-//     { name: 'William', address: 'Central st 954'},
-//     { name: 'Chuck', address: 'Main Road 989'},
-//     { name: 'Viola', address: 'Sideway 1633'}
-//   ];
-//   dbo.collection("customers").insertMany(myobj, function(err, res) {
-//     if (err) throw err;
-//     console.log("Number of documents inserted: " + res.insertedCount);
-//     db.close();
-//   });
-// });
 
 
 

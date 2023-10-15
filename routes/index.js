@@ -1,6 +1,6 @@
-import {Router} from 'express';
+const {Router} = require('express');
+
 let rootRouter = Router();
 
 
-
-export default rootRouter;
+module.exports = rootRouter;

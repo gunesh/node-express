@@ -1,7 +1,7 @@
-import { Router } from 'express';
-import rootRoutes from '../index.js'
+const { Router } = require('express');
+const rootRoutes = require('./index.js');
 
 const AppRoute = (app) => {
     app.use('/', rootRoutes);
 }
-export default AppRoute;
+module.exports =  AppRoute;
